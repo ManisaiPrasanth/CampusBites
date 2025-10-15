@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Test</title>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .result { background: #f0f0f0; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>🔐 Login Diagnostic Tool</h1>
+    
+    <h2>Test 1: Direct Fetch (No CORS)</h2>
+    <button onclick="testDirectFetch()">Test Direct Fetch</button>
+    <div id="test1-result" class="result"></div>
+
+    <h2>Test 2: With Credentials</h2>
+    <button onclick="testWithCredentials()">Test With Credentials</button>
+    <div id="test2-result" class="result"></div>
+
+    <h2>Test 3: Exact Frontend API Call</h2>
+    <button onclick="testFrontendMethod()">Test Frontend Method</button>
+    <div id="test3-result" class="result"></div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        const credentials = {
+            email: 'admin@campusbites.com',
+            password: 'Admin@123'
+        };
+
+        async function testDirectFetch() {
+            const result = document.getElementById('test1-result');
+            result.innerHTML = 'Testing...';
+            
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(credentials)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    result.innerHTML = `<div class="success">✅ SUCCESS!</div>
+                        <div>User: ${data.user.fullName}</div>
+                        <div>Role: ${data.user.role}</div>
+                        <div>Token: ${data.token.substring(0, 50)}...</div>`;
+                } else {
+                    result.innerHTML = `<div class="error">❌ FAILED</div>
+                        <div>Status: ${response.status}</div>
+                        <div>Message: ${data.message}</div>`;
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ ERROR: ${error.message}</div>`;
+            }
+        }
+
+        async function testWithCredentials() {
+            const result = document.getElementById('test2-result');
+            result.innerHTML = 'Testing...';
+            
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(credentials)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    result.innerHTML = `<div class="success">✅ SUCCESS!</div>
+                        <div>User: ${data.user.fullName}</div>
+                        <div>Role: ${data.user.role}</div>
+                        <div>Token: ${data.token.substring(0, 50)}...</div>`;
+                    localStorage.setItem('authToken', data.token);
+                } else {
+                    result.innerHTML = `<div class="error">❌ FAILED</div>
+                        <div>Status: ${response.status}</div>
+                        <div>Message: ${data.message}</div>`;
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ ERROR: ${error.message}</div>`;
+            }
+        }
+
+        async function testFrontendMethod() {
+            const result = document.getElementById('test3-result');
+            result.innerHTML = 'Testing...';
+            
+            // Simulate exact axios setup from frontend
+            const axios = window.axios || { post: async (url, data, config) => {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...config?.headers
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(data)
+                });
+                if (!response.ok) throw new Error(await response.text());
+                return { data: await response.json() };
+            }};
+            
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(credentials)
+                });
+                
+                const data = await response.json();
+                
+                result.innerHTML = `<div class="success">✅ Response received</div>
+                    <div>Status: ${response.status}</div>
+                    <div>Success: ${data.success}</div>
+                    <div>Message: ${data.message || 'OK'}</div>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ ERROR: ${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,154 @@
+.admin-orders-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+}
+
+.admin-orders-section {
+  flex: 1;
+  padding: 3rem 0;
+}
+
+.admin-orders-header {
+  margin-bottom: 2rem;
+}
+
+.admin-orders-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+}
+
+.admin-orders-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.admin-order-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.5rem;
+  background: var(--bg-secondary);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.order-card-header h3 {
+  font-size: 1.25rem;
+  margin: 0 0 0.75rem 0;
+  color: var(--text-primary);
+}
+
+.order-customer,
+.order-email {
+  margin: 0.25rem 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.order-customer i,
+.order-email i {
+  color: var(--primary-color);
+  width: 16px;
+}
+
+.order-status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: capitalize;
+}
+
+.order-card-body {
+  padding: 1.5rem;
+}
+
+.order-items-list h4 {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.order-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+.order-item-row:last-child {
+  border-bottom: none;
+}
+
+.order-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  margin-top: 1rem;
+  border-top: 2px solid var(--border-color);
+  font-size: 1.25rem;
+}
+
+.total-amount {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+}
+
+.order-meta {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.order-meta p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.order-meta i {
+  color: var(--primary-color);
+}
+
+.order-card-footer {
+  padding: 1.5rem;
+  background: var(--bg-secondary);
+  border-top: 2px solid var(--border-color);
+}
+
+.order-card-footer .btn {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .admin-orders-header h1 {
+    font-size: 2rem;
+  }
+
+  .order-card-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .order-status-badge {
+    align-self: flex-start;
+  }
+}
+

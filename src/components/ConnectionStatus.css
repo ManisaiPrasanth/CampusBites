@@ -1,0 +1,146 @@
+.connection-status {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.status-indicator {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 3px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.25rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.status-indicator:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.status-details {
+  position: absolute;
+  bottom: 60px;
+  right: 0;
+  width: 320px;
+  padding: 0;
+  animation: slideUp 0.3s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 2px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.status-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.status-header button {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.status-header button:hover {
+  background: var(--border-color);
+  color: var(--text-primary);
+}
+
+.status-body {
+  padding: 1rem;
+}
+
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.status-row:last-of-type {
+  border-bottom: none;
+}
+
+.status-row span:first-child {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.status-row span:last-child {
+  font-weight: 500;
+}
+
+.status-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid #ef4444;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  margin: 0.75rem 0;
+}
+
+.status-error strong {
+  color: #ef4444;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.status-error p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.status-body .btn {
+  width: 100%;
+  margin-top: 0.75rem;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .connection-status {
+    bottom: 80px;
+    right: 10px;
+  }
+
+  .status-indicator {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .status-details {
+    width: calc(100vw - 20px);
+    right: -10px;
+  }
+}
+
