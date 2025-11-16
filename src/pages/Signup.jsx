@@ -143,6 +143,13 @@ const Signup = () => {
       return;
     }
 
+    // Validate password strength (must contain uppercase, lowercase, and number)
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
+    if (!passwordRegex.test(formData.password)) {
+      toast.error('Password must contain at least one uppercase letter, one lowercase letter, and one number');
+      return;
+    }
+
     if (!/^\d{10}$/.test(formData.phoneNumber)) {
       toast.error('Please enter a valid 10-digit phone number');
       return;
@@ -240,10 +247,13 @@ const Signup = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="Enter password (min 6 characters)"
+                placeholder="Enter password (min 6 chars, 1 uppercase, 1 lowercase, 1 number)"
                 required
                 minLength={6}
               />
+              <small className="form-hint">
+                Password must contain at least one uppercase letter, one lowercase letter, and one number
+              </small>
             </div>
 
             <div className="form-group">

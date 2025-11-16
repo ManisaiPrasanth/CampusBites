@@ -222,6 +222,14 @@
   font-weight: bold;
 }
 
+.form-hint {
+  display: block;
+  color: #6b7280;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  line-height: 1.4;
+}
+
 /* Disabled button styles */
 .btn:disabled {
   opacity: 0.6;

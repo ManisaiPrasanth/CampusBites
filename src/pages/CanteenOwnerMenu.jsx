@@ -80,7 +80,7 @@ const CanteenOwnerMenu = () => {
       preparationTime: item.preparationTime || '',
       calories: item.calories || '',
       isVegetarian: item.isVegetarian ?? true,
-      available: item.available ?? true,
+      available: item.isAvailable ?? true,
     });
     setShowAddForm(true);
   };
@@ -112,9 +112,9 @@ const CanteenOwnerMenu = () => {
   const toggleAvailability = async (item) => {
     try {
       await canteenOwnerAPI.updateMenuItem(item._id, {
-        available: !item.available,
+        available: !item.isAvailable,
       });
-      toast.success(`${item.name} is now ${!item.available ? 'available' : 'unavailable'}`);
+      toast.success(`${item.name} is now ${!item.isAvailable ? 'available' : 'unavailable'}`);
       fetchMenuItems();
     } catch (error) {
       console.error('Failed to update availability:', error);
@@ -318,7 +318,7 @@ const CanteenOwnerMenu = () => {
             ) : (
               <div className="menu-items-grid grid grid-2">
                 {menuItems.map((item) => (
-                  <div key={item._id} className={`menu-item-card card ${!item.available ? 'unavailable' : ''}`}>
+                  <div key={item._id} className={`menu-item-card card ${!item.isAvailable ? 'unavailable' : ''}`}>
                     <div className="item-header">
                       <div>
                         <h3>{item.name}</h3>
@@ -353,8 +353,8 @@ const CanteenOwnerMenu = () => {
                     )}
 
                     <div className="item-status">
-                      <span className={`status-badge ${item.available ? 'available' : 'unavailable'}`}>
-                        {item.available ? '✓ Available' : '✗ Unavailable'}
+                      <span className={`status-badge ${item.isAvailable ? 'available' : 'unavailable'}`}>
+                        {item.isAvailable ? '✓ Available' : '✗ Unavailable'}
                       </span>
                     </div>
 
@@ -362,9 +362,9 @@ const CanteenOwnerMenu = () => {
                       <button 
                         className="btn-icon btn-success"
                         onClick={() => toggleAvailability(item)}
-                        title={item.available ? 'Mark Unavailable' : 'Mark Available'}
+                        title={item.isAvailable ? 'Mark Unavailable' : 'Mark Available'}
                       >
-                        <i className={`fas fa-${item.available ? 'eye-slash' : 'eye'}`}></i>
+                        <i className={`fas fa-${item.isAvailable ? 'eye-slash' : 'eye'}`}></i>
                       </button>
                       <button 
                         className="btn-icon btn-primary"

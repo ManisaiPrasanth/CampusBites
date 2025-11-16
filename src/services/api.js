@@ -45,7 +45,17 @@ api.interceptors.response.use(
       console.error('❌ API Error:', error.config?.url, error.response?.status);
     }
 
-    const message = error.response?.data?.message || error.message || 'Something went wrong';
+    // Extract detailed error message
+    let message = error.message || 'Something went wrong';
+    
+    if (error.response?.data) {
+      // If there are validation errors, show them
+      if (error.response.data.errors && Array.isArray(error.response.data.errors)) {
+        message = error.response.data.errors.map(err => err.message || err.msg).join(', ');
+      } else if (error.response.data.message) {
+        message = error.response.data.message;
+      }
+    }
     
     // Handle specific status codes
     if (error.response?.status === 401) {
@@ -339,6 +349,21 @@ export const canteenOwnerAPI = {
 
   updateOrderStatus: async (id, status, note = '') => {
     return await api.put(`/canteen-owner/orders/${id}/status`, { status, note });
+  },
+};
+
+// Payment API
+export const paymentAPI = {
+  createRazorpayOrder: async (amount, orderId) => {
+    return await api.post('/payments/create-order', { amount, orderId });
+  },
+
+  verifyPayment: async (paymentData, orderId) => {
+    return await api.post('/payments/verify', { ...paymentData, orderId });
+  },
+
+  getPaymentStatus: async (orderId) => {
+    return await api.get(`/payments/status/${orderId}`);
   },
 };
 
