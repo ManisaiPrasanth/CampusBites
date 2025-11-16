@@ -52,6 +52,7 @@ app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/menu', require('./routes/menu.routes'));
 app.use('/api/orders', require('./routes/order.routes'));
 app.use('/api/reviews', require('./routes/review.routes'));
+app.use('/api/payments', require('./routes/payment.routes'));
 app.use('/api/canteen-owner', require('./routes/canteenOwner.routes'));
 app.use('/api/admin', require('./routes/admin.routes'));
 

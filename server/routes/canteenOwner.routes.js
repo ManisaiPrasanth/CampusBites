@@ -104,4 +104,125 @@ router.get('/orders', protect, authorize('canteen_owner'), async (req, res, next
   }
 });
 
+// Create menu item for canteen owner
+router.post('/menu', protect, authorize('canteen_owner'), async (req, res, next) => {
+  try {
+    const canteen = req.user.assignedCanteen;
+    
+    if (!canteen) {
+      return res.status(400).json({
+        success: false,
+        message: 'No canteen assigned to this account'
+      });
+    }
+
+    // Set canteen and addedBy automatically
+    req.body.canteen = canteen;
+    req.body.addedBy = req.user.id;
+    req.body.isAvailable = req.body.available !== undefined ? req.body.available : true;
+
+    const menuItem = await MenuItem.create(req.body);
+
+    res.status(201).json({
+      success: true,
+      menuItem
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Update menu item for canteen owner
+router.put('/menu/:id', protect, authorize('canteen_owner'), async (req, res, next) => {
+  try {
+    const canteen = req.user.assignedCanteen;
+    
+    if (!canteen) {
+      return res.status(400).json({
+        success: false,
+        message: 'No canteen assigned to this account'
+      });
+    }
+
+    const menuItem = await MenuItem.findById(req.params.id);
+
+    if (!menuItem) {
+      return res.status(404).json({
+        success: false,
+        message: 'Menu item not found'
+      });
+    }
+
+    // Verify the menu item belongs to this canteen owner
+    if (menuItem.canteen !== canteen) {
+      return res.status(403).json({
+        success: false,
+        message: 'You can only update items from your assigned canteen'
+      });
+    }
+
+    // Map available to isAvailable
+    if (req.body.available !== undefined) {
+      req.body.isAvailable = req.body.available;
+      delete req.body.available;
+    }
+
+    const updatedItem = await MenuItem.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+        runValidators: true
+      }
+    );
+
+    res.status(200).json({
+      success: true,
+      menuItem: updatedItem
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Delete menu item for canteen owner
+router.delete('/menu/:id', protect, authorize('canteen_owner'), async (req, res, next) => {
+  try {
+    const canteen = req.user.assignedCanteen;
+    
+    if (!canteen) {
+      return res.status(400).json({
+        success: false,
+        message: 'No canteen assigned to this account'
+      });
+    }
+
+    const menuItem = await MenuItem.findById(req.params.id);
+
+    if (!menuItem) {
+      return res.status(404).json({
+        success: false,
+        message: 'Menu item not found'
+      });
+    }
+
+    // Verify the menu item belongs to this canteen owner
+    if (menuItem.canteen !== canteen) {
+      return res.status(403).json({
+        success: false,
+        message: 'You can only delete items from your assigned canteen'
+      });
+    }
+
+    await menuItem.deleteOne();
+
+    res.status(200).json({
+      success: true,
+      message: 'Menu item deleted successfully'
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
